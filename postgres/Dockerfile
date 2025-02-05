@@ -14,7 +14,6 @@ RUN /opt/pyenv/bin/pip install pika
 
 # Copia o script de inicialização do banco de dados
 COPY init.sql /docker-entrypoint-initdb.d/
-COPY pg_amqp.sql /docker-entrypoint-initdb.d/
 
 # Define o caminho do ambiente virtual para o PL/Python
 ENV PYTHONPATH /opt/pyenv/lib/python3.11/site-packages

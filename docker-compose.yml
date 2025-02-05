@@ -25,9 +25,43 @@ services:
       timeout: 10s                             
       retries: 10                       
 
-  app:
-    container_name: app
-    build: ./app
+  pagamento.inicia:
+    container_name: pagamento.passo1.inicia
+    stdin_open: true 
+    build: ./pagamento.inicia
+    depends_on:
+      rabbitmq:
+          condition: service_healthy
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      POSTGRES_HOST: postgres
+
+  pagamento.valida-data:
+    container_name: pagamento.passo2.valida-data
+    stdin_open: true 
+    build: ./pagamento.validaData
+    depends_on:
+      rabbitmq:
+          condition: service_healthy
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      POSTGRES_HOST: postgres
+
+  pagamento.valida-alcada:
+    container_name: pagamento.passo3.valida-alcada
+    stdin_open: true 
+    build: ./pagamento.solicitante
+    depends_on:
+      rabbitmq:
+          condition: service_healthy
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      POSTGRES_HOST: postgres
+
+  pagamento.final:
+    container_name: pagamento.final
+    stdin_open: true 
+    build: ./pagamento.final
     depends_on:
       rabbitmq:
           condition: service_healthy
